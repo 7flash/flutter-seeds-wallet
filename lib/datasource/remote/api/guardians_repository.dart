@@ -7,6 +7,7 @@ import 'package:dart_esr/dart_esr.dart' as esr;
 import 'package:eosdart/eosdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:seeds/datasource/local/settings_storage.dart';
+import 'package:seeds/datasource/mock/mock_repository.dart';
 import 'package:seeds/datasource/remote/api/eos_repository.dart';
 import 'package:seeds/datasource/remote/api/network_repository.dart';
 import 'package:seeds/datasource/remote/firebase/firebase_remote_config.dart';
@@ -254,6 +255,10 @@ class GuardiansRepository extends EosRepository with NetworkRepository {
   Future<Result<dynamic>> getAccountRecovery(String accountName) async {
     print('[http] get account recovery $accountName');
 
+    if (MockRepository.isMockMode) {
+      return MockRepository().mockGetAccountRecovery(accountName);
+    }
+
     final String requestURL = "$baseURL/v1/chain/get_table_rows";
 
     final String request = createRequest(
@@ -274,6 +279,10 @@ class GuardiansRepository extends EosRepository with NetworkRepository {
 
   Future<Result<dynamic>> getAccountGuardians(String accountName) async {
     print('[http] get account guardians');
+
+    if (MockRepository.isMockMode) {
+      return MockRepository().mockGetAccountGuardians(accountName);
+    }
 
     final String requestURL = "$baseURL/v1/chain/get_table_rows";
 
