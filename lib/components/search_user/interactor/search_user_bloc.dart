@@ -16,6 +16,7 @@ class SearchUserBloc extends Bloc<SearchUserEvent, SearchUserState> {
   @override
   Stream<Transition<SearchUserEvent, SearchUserState>> transformEvents(
     Stream<SearchUserEvent> events,
+    // ignore: deprecated_member_use
     TransitionFunction<SearchUserEvent, SearchUserState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) => event is ClearIconTapped);

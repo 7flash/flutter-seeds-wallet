@@ -79,7 +79,7 @@ class VoiceRepository extends NetworkRepository {
     return http
         .post(voiceURL, headers: headers, body: request)
         .then((http.Response response) => mapHttpResponse(response, (dynamic body) {
-              return VoiceModel.fromJson(body);
+              return VoiceModel.fromBalanceJson(body);
             }))
         .catchError((error) => mapHttpError(error));
   }

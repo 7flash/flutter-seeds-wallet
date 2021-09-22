@@ -36,7 +36,7 @@ class ProposalDetailsBloc extends Bloc<ProposalDetailsEvent, ProposalDetailsStat
     if (event is OnConfirmVoteButtonPressed) {
       yield state.copyWith(pageState: PageState.loading);
       final Result result = await VoteProposalUseCase().run(
-        id: state.proposals[state.currentIndex].id,
+        proposal: state.proposals[state.currentIndex],
         amount: state.voteAmount,
       );
       yield VoteProposalStateMapper().mapResultsToState(state, result);

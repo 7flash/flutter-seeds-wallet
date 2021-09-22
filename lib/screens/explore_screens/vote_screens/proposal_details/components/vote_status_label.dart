@@ -13,7 +13,8 @@ class VoteStatusLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProposalDetailsBloc, ProposalDetailsState>(
       builder: (context, state) {
-        if (state.proposals[state.currentIndex].stage == 'active') {
+        if (state.proposals[state.currentIndex].stage == 'active' ||
+            state.proposals[state.currentIndex].stage.isEmpty) {
           switch (state.voteStatus) {
             case VoteStatus.notCitizen:
               return Padding(

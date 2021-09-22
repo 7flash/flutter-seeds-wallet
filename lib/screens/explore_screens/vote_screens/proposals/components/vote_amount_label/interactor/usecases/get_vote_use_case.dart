@@ -8,15 +8,22 @@ class GetVoteUseCase {
   final ProposalsRepository _proposalsRepository = ProposalsRepository();
 
   Future<Result> run(ProposalViewModel proposal, String account) async {
+    final cacheRepository = const CacheRepository();
     late Result result;
     VoteModel? voteModel;
+
     if (proposal.proposalCategory == ProposalCategory.referendum) {
-      result = await _proposalsRepository.getReferendumVote(proposal.id, account);
-      if (result.isValue) {
-        voteModel = result.asValue!.value as VoteModel;
+      voteModel = await cacheRepository.getReferendumVote(account, proposal.id);
+      if (voteModel == null) {
+        result = await _proposalsRepository.getReferendumVote(proposal.id, account);
+        if (result.isValue) {
+          voteModel = result.asValue!.value as VoteModel;
+          if (voteModel.isVoted) {
+            await cacheRepository.saveReferendumVote(proposal.id, voteModel);
+          }
+        }
       }
     } else {
-      final cacheRepository = const CacheRepository();
       voteModel = await cacheRepository.getProposalVote(account, proposal.id);
       if (voteModel == null) {
         result = await _proposalsRepository.getProposalVote(proposal.id, account);
